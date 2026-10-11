@@ -12,6 +12,7 @@ class Player:
     turns_in_prison_or_pricewar: int = 0
     holdings: list = field(default_factory=list)   # tile indices owned
     bankrupt: bool = False
+    get_out_free_cards: int = 0                    # NEW in stage 2 (card effect: get_out_free)
 
     @property
     def pawn_color(self) -> str:

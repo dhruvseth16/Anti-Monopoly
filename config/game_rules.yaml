@@ -94,3 +94,12 @@ role_balance:                    # Rule 4
 win_conditions:                   # Rule 1
   game_a: last_player_standing
   game_b: richest_survivor_by_role
+
+# Add to YOUR config/game_rules.yaml (nothing else in the file changes):
+
+building:
+  monopolist:
+    monopolization_min_properties: 2    # add under the existing building.monopolist block
+
+win_conditions:
+  active_game: game_a                   # add under the existing win_conditions block (game_a | game_b)
