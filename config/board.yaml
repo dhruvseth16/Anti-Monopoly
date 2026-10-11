@@ -1,0 +1,353 @@
+- index: 0
+  type: start
+
+- index: 1
+  type: property
+  name: "New Orleans: Basin Street"
+  group: new_orleans
+  group_size: 2
+  price: 60
+  house_cost: 50
+  mortgage_value: 30
+  mortgage_redemption: 33
+  rent:
+    competitor: [6, 11, 16, 21, 26, 31]
+    monopolist: [6, 22, 32, 42, 52]
+  monopolist_unbuilt_rent_if_monopolized: 12
+
+- index: 2
+  type: card_draw
+
+- index: 3
+  type: property
+  name: "New Orleans: French Quarter"
+  group: new_orleans
+  group_size: 2
+  price: 60
+  house_cost: null
+  mortgage_value: 30
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 4
+  type: income_tax
+
+- index: 5
+  type: transport
+  name: "U.S. Railroad"
+  price: 200
+  mortgage_value: 100
+  mortgage_redemption: 110
+  fare:
+    competitor: [20, 20, 20, 20]
+    monopolist: [40, 80, 160, 320]
+
+- index: 6
+  type: property
+  name: "Los Angeles: Sunset Blvd."
+  group: los_angeles
+  group_size: 3
+  price: 100
+  house_cost: null
+  mortgage_value: 50
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 7
+  type: card_draw
+
+- index: 8
+  type: property
+  name: "Los Angeles: Wilshire Blvd."
+  group: los_angeles
+  group_size: 3
+  price: 100
+  house_cost: null
+  mortgage_value: 50
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 9
+  type: property
+  name: "Los Angeles: Hollywood Blvd."
+  group: los_angeles
+  group_size: 3
+  price: 120
+  house_cost: null
+  mortgage_value: 60
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 10
+  type: corner_prison_pricewar
+
+- index: 11
+  type: property
+  name: "Chicago: Rush St."
+  group: chicago
+  group_size: 3
+  price: 140
+  house_cost: null
+  mortgage_value: 70
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 12
+  type: utility
+  name: "Electric Company"
+  price: 150
+  mortgage_value: 75
+  mortgage_redemption: 83
+  dice_multiplier:
+    competitor: [4, 4]
+    monopolist: [4, 10]
+
+- index: 13
+  type: property
+  name: "Chicago: State St."
+  group: chicago
+  group_size: 3
+  price: 140
+  house_cost: null
+  mortgage_value: 70
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 14
+  type: property
+  name: "Chicago: Michigan Ave."
+  group: chicago
+  group_size: 3
+  price: 160
+  house_cost: null
+  mortgage_value: 80
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 15
+  type: transport
+  name: "U.S. Bus Company"
+  price: 200
+  mortgage_value: 100
+  mortgage_redemption: null
+  fare: {competitor: null, monopolist: null}
+
+- index: 16
+  type: property
+  name: "Philadelphia: Locust St."
+  group: philadelphia
+  group_size: 3
+  price: 180
+  house_cost: null
+  mortgage_value: 90
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 17
+  type: card_draw
+
+- index: 18
+  type: property
+  name: "Philadelphia: Chestnut St."
+  group: philadelphia
+  group_size: 3
+  price: 180
+  house_cost: null
+  mortgage_value: 90
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 19
+  type: property
+  name: "Philadelphia: Walnut St."
+  group: philadelphia
+  group_size: 3
+  price: 200
+  house_cost: null
+  mortgage_value: 100
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 20
+  type: foundation
+
+- index: 21
+  type: property
+  name: "Boston: Brattle St."
+  group: boston
+  group_size: 3
+  price: 220
+  house_cost: null
+  mortgage_value: 110
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 22
+  type: card_draw
+
+- index: 23
+  type: property
+  name: "Boston: Harvard Square"
+  group: boston
+  group_size: 3
+  price: 220
+  house_cost: null
+  mortgage_value: 110
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 24
+  type: property
+  name: "Boston: Beacon St."
+  group: boston
+  group_size: 3
+  price: 240
+  house_cost: null
+  mortgage_value: 120
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 25
+  type: transport
+  name: "U.S. Air Line"
+  price: 200
+  mortgage_value: 100
+  mortgage_redemption: null
+  fare: {competitor: null, monopolist: null}
+
+- index: 26
+  type: property
+  name: "Washington: Georgetown"
+  group: washington
+  group_size: 3
+  price: 260
+  house_cost: null
+  mortgage_value: 130
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 27
+  type: property
+  name: "Washington: Constitution Ave."
+  group: washington
+  group_size: 3
+  price: 260
+  house_cost: null
+  mortgage_value: 130
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 28
+  type: utility
+  name: "U.S. Gas Company"
+  price: 150
+  mortgage_value: 75
+  mortgage_redemption: null
+  dice_multiplier: {competitor: null, monopolist: null}
+
+- index: 29
+  type: property
+  name: "Washington: Pennsylvania Ave."
+  group: washington
+  group_size: 3
+  price: 280
+  house_cost: null
+  mortgage_value: 140
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 30
+  type: corner_role_redirect
+
+- index: 31
+  type: property
+  name: "San Francisco: Fisherman's Wharf"
+  group: san_francisco
+  group_size: 3
+  price: 300
+  house_cost: null
+  mortgage_value: 150
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 32
+  type: property
+  name: "San Francisco: Union Square"
+  group: san_francisco
+  group_size: 3
+  price: 300
+  house_cost: null
+  mortgage_value: 150
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 33
+  type: card_draw
+
+- index: 34
+  type: property
+  name: "San Francisco: Nob Hill"
+  group: san_francisco
+  group_size: 3
+  price: 320
+  house_cost: null
+  mortgage_value: 160
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 35
+  type: transport
+  name: "U.S. Trucking Company"
+  price: 200
+  mortgage_value: 100
+  mortgage_redemption: null
+  fare: {competitor: null, monopolist: null}
+
+- index: 36
+  type: card_draw
+
+- index: 37
+  type: property
+  name: "New York: Fifth Ave."
+  group: new_york
+  group_size: 2
+  price: 350
+  house_cost: null
+  mortgage_value: 175
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null
+
+- index: 38
+  type: property_tax
+
+- index: 39
+  type: property
+  name: "New York: Wall St."
+  group: new_york
+  group_size: 2
+  price: 400
+  house_cost: null
+  mortgage_value: 200
+  mortgage_redemption: null
+  rent: {competitor: null, monopolist: null}
+  monopolist_unbuilt_rent_if_monopolized: null

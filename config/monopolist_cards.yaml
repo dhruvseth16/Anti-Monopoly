@@ -1,0 +1,16 @@
+# 25 cards total per the box contents. Only 1 digitized so far.
+# Same open effect.type vocabulary as competitor_cards.yaml.
+
+- id: mono_001
+  text: >
+    A new invention would have undercut your most profitable item. You
+    bought the invention and kept it off the market.
+  effect:
+    type: collect
+    amount: 75
+    from: treasurer
+
+# - id: mono_002
+#   text: null
+#   effect: null
+# ... through mono_025 — add as you digitize your physical cards

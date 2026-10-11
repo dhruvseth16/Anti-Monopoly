@@ -1,0 +1,18 @@
+# 25 cards total per the box contents. Only 1 digitized so far.
+# effect.type is an open vocabulary — add new types as you transcribe more cards
+# (move_to, move_relative, go_to_prison, get_out_free, pay_per_house,
+# collect_from_each_player, etc.). Don't pre-define a closed enum.
+
+- id: comp_001
+  text: >
+    A giant apartment house chain will let you stay in business to avoid a
+    crackdown by the Anti-Trust Division. Be grateful and...
+  effect:
+    type: collect
+    amount: 25
+    from: treasurer
+
+# - id: comp_002
+#   text: null
+#   effect: null
+# ... through comp_025 — add as you digitize your physical cards
