@@ -129,9 +129,11 @@ class Engine:
         self.treasurer.pay(player, amount)
         self.log("pass_go", player.id, amount=amount)
 
+    def prison_index(self) -> int:
+        return next(t.index for t in self.board.tiles if t.type == "corner_prison_pricewar")
+
     def send_to_prison(self, player: Player) -> None:
-        prison_idx = next(t.index for t in self.board.tiles if t.type == "corner_prison_pricewar")
-        player.position = prison_idx
+        player.position = self.prison_index()
         player.in_prison_or_pricewar = True
         player.turns_in_prison_or_pricewar = 0
         self.log("go_to_prison", player.id)

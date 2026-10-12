@@ -1,6 +1,3 @@
-# 25 cards total per the box contents. Only 1 digitized so far.
-# Same open effect.type vocabulary as competitor_cards.yaml.
-
 - id: mono_001
   text: >
     A new invention would have undercut your most profitable item. You
@@ -10,7 +7,210 @@
     amount: 75
     from: treasurer
 
-# - id: mono_002
-#   text: null
-#   effect: null
-# ... through mono_025 — add as you digitize your physical cards
+- id: mono_002
+  text: >
+    Without competition at home, your firm became sloppy. Now you are being
+    outsold by foreign goods.
+  effect:
+    type: pay
+    amount: 25
+    to: treasurer
+
+- id: mono_003
+  text: >
+    You and other hotel owners charged Justice Department lawyers the same
+    rent no matter how crummy the rooms. That did it! The investigation
+    uncovered a conspiracy to rig prices.
+  effect:
+    type: go_to_prison
+    destination: "Prison"
+    destination_index: 10
+    do_not_collect_from_start: true
+    miss_turns_collecting_rent: 2
+
+- id: mono_004
+  text: >
+    A bill to let the government sue monopolists on behalf of citizens has
+    been weakened by the Business Rotund Table lobby.
+  effect:
+    type: collect
+    amount: 25
+    from: competitor
+
+- id: mono_005
+  text: >
+    Your political contribution was not forgotten. The smoke pollution
+    controls which cut down on your profits have been abolished.
+  effect:
+    type: collect
+    amount: 75
+    from: treasurer
+
+- id: mono_006
+  text: >
+    Through a shady deal, you landed a big government contract. But someone
+    spilled the beans to the press. To see whether your deal will go through,
+    roll the dice. If you get 7 or less, no deal.
+  effect:
+    type: conditional_collect
+    condition: "roll 8 or more"
+    amount: 75
+    from: treasurer
+
+- id: mono_007
+  text: >
+    An illegal campaign contribution you made to senator R.N. Ader went by
+    mistake to Ralph Nader. Just plead no contest.
+  effect:
+    type: pay
+    amount: 50
+    to: treasurer
+
+- id: mono_008
+  text: >
+    A new judge thinks what's good for giant business is good for the country.
+    The courts are smiling on you.
+  effect:
+    type: collect
+    amount: 25
+    from: treasurer
+
+- id: mono_009
+  text: >
+    You schemed to monopolize the sun as an energy source, but it didn't work.
+    Nice try, but you can't win 'em all.
+  effect:
+    type: pay
+    amount: 50
+    to: treasurer
+
+- id: mono_010
+  text: null
+  effect:
+    type: move_to
+    destination: "Start"
+    destination_index: 0
+
+- id: mono_011
+  text: >
+    Because of a public outcry, a tax loophole created especially for you by
+    a neighborly politician has been abolished.
+  effect:
+    type: pay
+    amount: 75
+    to: treasurer
+
+- id: mono_012
+  text: null
+  effect:
+    type: move_to
+    destination: "Electric Company"
+    destination_index: 12
+
+- id: mono_013
+  text: null
+  effect:
+    type: move_to
+    destination: "Washington: Pennsylvania Ave."
+    destination_index: 29
+
+- id: mono_014
+  text: >
+    A realtor friend has been appointed to head a Federal housing agency.
+    He is too nice a guy to forget his old pals.
+  effect:
+    type: collect
+    amount: 25
+    from: treasurer
+
+- id: mono_015
+  text: null
+  effect:
+    type: move_to
+    destination: "U.S. Railroad"
+    destination_index: 5
+
+- id: mono_016
+  text: >
+    Your construction firm has monopolized bricks. Competitors now pay you
+    extra high prices for them.
+  effect:
+    type: collect
+    amount: 50
+    from: treasurer
+
+- id: mono_017
+  text: >
+    You bribed a lawyer in the Antitrust division to approve a merger. An
+    honest secretary blew the whistle on the deal.
+  effect:
+    type: go_to_prison
+    destination: "Prison"
+    destination_index: 10
+    do_not_collect_from_start: true
+    miss_turns_collecting_rent: 2
+
+- id: mono_018
+  text: >
+    The courts have forced your twin brother to give up a directorship in a
+    company which was supposed to be competing with you.
+  effect:
+    type: pay
+    amount: 25
+    to: treasurer
+
+- id: mono_019
+  text: >
+    By financing cultural activities with a small fraction of your monopoly
+    profits, you have greatly improved your public image. Good thinking!
+  effect:
+    type: none
+
+- id: mono_020
+  text: null
+  effect:
+    type: move_to
+    destination: "New Orleans: French Quarter"
+    destination_index: 3
+
+- id: mono_021
+  text: >
+    Despite your many convictions under the Anti-Monopolist laws, you've
+    won the national "Humanitarian" Award. Congratulations!
+  effect:
+    type: none
+
+- id: mono_022
+  text: >
+    You rigged the market for bathtubs during a merry meeting at the Big
+    Wheel Golf Club.
+  effect:
+    type: collect
+    amount: 50
+    from: treasurer
+
+- id: mono_023
+  text: >
+    You claimed you invented an ingenious shovel you saw in an Aztec museum.
+    The fraudulent patent you obtained on it has now been invalidated by the
+    courts.
+  effect:
+    type: pay
+    amount: 75
+    to: treasurer
+
+- id: mono_024
+  text: >
+    You bankrupted your competitors by temporarily reducing your prices—and
+    then you were able to raise them even higher.
+  effect:
+    type: collect
+    amount: 50
+    from: treasurer
+
+- id: mono_025
+  text: null
+  effect:
+    type: move_to
+    destination: "Start"
+    destination_index: 0

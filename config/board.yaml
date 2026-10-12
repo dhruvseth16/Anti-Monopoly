@@ -24,11 +24,13 @@
   group: new_orleans
   group_size: 2
   price: 60
-  house_cost: null
+  house_cost: 50
   mortgage_value: 30
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 33
+  rent:
+    competitor: [6, 11, 16, 21, 26, 31]
+    monopolist: [6, 22, 32, 42, 52]
+  monopolist_unbuilt_rent_if_monopolized: 12
 
 - index: 4
   type: income_tax
@@ -49,11 +51,13 @@
   group: los_angeles
   group_size: 3
   price: 100
-  house_cost: null
+  house_cost: 50
   mortgage_value: 50
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 55
+  rent:
+    competitor: [10, 15, 20, 25, 30, 35]
+    monopolist: [10, 30, 40, 50, 60]
+  monopolist_unbuilt_rent_if_monopolized: 20
 
 - index: 7
   type: card_draw
@@ -64,11 +68,13 @@
   group: los_angeles
   group_size: 3
   price: 100
-  house_cost: null
+  house_cost: 50
   mortgage_value: 50
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 55
+  rent:
+    competitor: [10, 15, 20, 25, 30, 35]
+    monopolist: [10, 30, 40, 50, 60]
+  monopolist_unbuilt_rent_if_monopolized: 20
 
 - index: 9
   type: property
@@ -76,11 +82,13 @@
   group: los_angeles
   group_size: 3
   price: 120
-  house_cost: null
+  house_cost: 50
   mortgage_value: 60
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 66
+  rent:
+    competitor: [12, 17, 22, 27, 32, 37]
+    monopolist: [12, 34, 44, 54, 64]
+  monopolist_unbuilt_rent_if_monopolized: 24
 
 - index: 10
   type: corner_prison_pricewar
@@ -91,11 +99,13 @@
   group: chicago
   group_size: 3
   price: 140
-  house_cost: null
+  house_cost: 100
   mortgage_value: 70
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 77
+  rent:
+    competitor: [14, 24, 34, 44, 54, 64]
+    monopolist: [14, 48, 68, 88, 108]
+  monopolist_unbuilt_rent_if_monopolized: 28
 
 - index: 12
   type: utility
@@ -113,11 +123,13 @@
   group: chicago
   group_size: 3
   price: 140
-  house_cost: null
+  house_cost: 100
   mortgage_value: 70
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 77
+  rent:
+    competitor: [14, 24, 34, 44, 54, 64]
+    monopolist: [14, 48, 68, 88, 108]
+  monopolist_unbuilt_rent_if_monopolized: 28
 
 - index: 14
   type: property
@@ -125,19 +137,23 @@
   group: chicago
   group_size: 3
   price: 160
-  house_cost: null
+  house_cost: 100
   mortgage_value: 80
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 88
+  rent:
+    competitor: [16, 26, 36, 46, 56, 66]
+    monopolist: [16, 52, 72, 92, 112]
+  monopolist_unbuilt_rent_if_monopolized: 32
 
 - index: 15
   type: transport
   name: "U.S. Bus Company"
   price: 200
   mortgage_value: 100
-  mortgage_redemption: null
-  fare: {competitor: null, monopolist: null}
+  mortgage_redemption: 110
+  fare:
+    competitor: [20, 20, 20, 20]
+    monopolist: [40, 80, 160, 320]
 
 - index: 16
   type: property
@@ -145,11 +161,13 @@
   group: philadelphia
   group_size: 3
   price: 180
-  house_cost: null
+  house_cost: 100
   mortgage_value: 90
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 99
+  rent:
+    competitor: [18, 28, 38, 48, 58, 68]
+    monopolist: [18, 56, 76, 96, 116]
+  monopolist_unbuilt_rent_if_monopolized: 36
 
 - index: 17
   type: card_draw
@@ -160,11 +178,13 @@
   group: philadelphia
   group_size: 3
   price: 180
-  house_cost: null
+  house_cost: 100
   mortgage_value: 90
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 99
+  rent:
+    competitor: [18, 28, 38, 48, 58, 68]
+    monopolist: [18, 56, 76, 96, 116]
+  monopolist_unbuilt_rent_if_monopolized: 36
 
 - index: 19
   type: property
@@ -172,11 +192,13 @@
   group: philadelphia
   group_size: 3
   price: 200
-  house_cost: null
+  house_cost: 100
   mortgage_value: 100
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 110
+  rent:
+    competitor: [20, 30, 40, 50, 60, 70]
+    monopolist: [20, 60, 80, 100, 120]
+  monopolist_unbuilt_rent_if_monopolized: 40
 
 - index: 20
   type: foundation
@@ -187,11 +209,13 @@
   group: boston
   group_size: 3
   price: 220
-  house_cost: null
+  house_cost: 150
   mortgage_value: 110
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 121
+  rent:
+    competitor: [22, 37, 52, 67, 82, 97]
+    monopolist: [22, 74, 104, 134, 164]
+  monopolist_unbuilt_rent_if_monopolized: 44
 
 - index: 22
   type: card_draw
@@ -202,11 +226,13 @@
   group: boston
   group_size: 3
   price: 220
-  house_cost: null
+  house_cost: 150
   mortgage_value: 110
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 121
+  rent:
+    competitor: [22, 37, 52, 67, 82, 97]
+    monopolist: [22, 74, 104, 134, 164]
+  monopolist_unbuilt_rent_if_monopolized: 44
 
 - index: 24
   type: property
@@ -214,19 +240,23 @@
   group: boston
   group_size: 3
   price: 240
-  house_cost: null
+  house_cost: 150
   mortgage_value: 120
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 132
+  rent:
+    competitor: [24, 39, 54, 69, 84, 99]
+    monopolist: [24, 78, 108, 138, 168]
+  monopolist_unbuilt_rent_if_monopolized: 48
 
 - index: 25
   type: transport
   name: "U.S. Air Line"
   price: 200
   mortgage_value: 100
-  mortgage_redemption: null
-  fare: {competitor: null, monopolist: null}
+  mortgage_redemption: 110
+  fare:
+    competitor: [20, 20, 20, 20]
+    monopolist: [40, 80, 160, 320]
 
 - index: 26
   type: property
@@ -234,11 +264,13 @@
   group: washington
   group_size: 3
   price: 260
-  house_cost: null
+  house_cost: 150
   mortgage_value: 130
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 143
+  rent:
+    competitor: [26, 41, 56, 71, 86, 101]
+    monopolist: [26, 82, 112, 142, 172]
+  monopolist_unbuilt_rent_if_monopolized: 52
 
 - index: 27
   type: property
@@ -246,19 +278,23 @@
   group: washington
   group_size: 3
   price: 260
-  house_cost: null
+  house_cost: 150
   mortgage_value: 130
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 143
+  rent:
+    competitor: [26, 41, 56, 71, 86, 101]
+    monopolist: [26, 82, 112, 142, 172]
+  monopolist_unbuilt_rent_if_monopolized: 52
 
 - index: 28
   type: utility
   name: "U.S. Gas Company"
   price: 150
   mortgage_value: 75
-  mortgage_redemption: null
-  dice_multiplier: {competitor: null, monopolist: null}
+  mortgage_redemption: 83
+  dice_multiplier:
+    competitor: [4, 4]
+    monopolist: [4, 10]
 
 - index: 29
   type: property
@@ -266,11 +302,13 @@
   group: washington
   group_size: 3
   price: 280
-  house_cost: null
+  house_cost: 150
   mortgage_value: 140
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 154
+  rent:
+    competitor: [28, 43, 58, 73, 88, 103]
+    monopolist: [28, 86, 116, 146, 176]
+  monopolist_unbuilt_rent_if_monopolized: 56
 
 - index: 30
   type: corner_role_redirect
@@ -281,11 +319,13 @@
   group: san_francisco
   group_size: 3
   price: 300
-  house_cost: null
+  house_cost: 200
   mortgage_value: 150
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 165
+  rent:
+    competitor: [30, 50, 70, 90, 110, 130]
+    monopolist: [30, 100, 140, 180, 220]
+  monopolist_unbuilt_rent_if_monopolized: 60
 
 - index: 32
   type: property
@@ -293,11 +333,13 @@
   group: san_francisco
   group_size: 3
   price: 300
-  house_cost: null
+  house_cost: 200
   mortgage_value: 150
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 165
+  rent:
+    competitor: [30, 50, 70, 90, 110, 130]
+    monopolist: [30, 100, 140, 180, 220]
+  monopolist_unbuilt_rent_if_monopolized: 60
 
 - index: 33
   type: card_draw
@@ -308,19 +350,23 @@
   group: san_francisco
   group_size: 3
   price: 320
-  house_cost: null
+  house_cost: 200
   mortgage_value: 160
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 176
+  rent:
+    competitor: [32, 52, 72, 92, 112, 132]
+    monopolist: [32, 104, 144, 184, 224]
+  monopolist_unbuilt_rent_if_monopolized: 64
 
 - index: 35
   type: transport
   name: "U.S. Trucking Company"
   price: 200
   mortgage_value: 100
-  mortgage_redemption: null
-  fare: {competitor: null, monopolist: null}
+  mortgage_redemption: 110
+  fare:
+    competitor: [20, 20, 20, 20]
+    monopolist: [40, 80, 160, 320]
 
 - index: 36
   type: card_draw
@@ -331,11 +377,13 @@
   group: new_york
   group_size: 2
   price: 350
-  house_cost: null
+  house_cost: 200
   mortgage_value: 175
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 193
+  rent:
+    competitor: [35, 55, 75, 95, 115, 135]
+    monopolist: [35, 110, 150, 190, 230]
+  monopolist_unbuilt_rent_if_monopolized: 70
 
 - index: 38
   type: property_tax
@@ -346,8 +394,10 @@
   group: new_york
   group_size: 2
   price: 400
-  house_cost: null
+  house_cost: 200
   mortgage_value: 200
-  mortgage_redemption: null
-  rent: {competitor: null, monopolist: null}
-  monopolist_unbuilt_rent_if_monopolized: null
+  mortgage_redemption: 220
+  rent:
+    competitor: [40, 60, 80, 100, 120, 140]
+    monopolist: [40, 120, 160, 200, 240]
+  monopolist_unbuilt_rent_if_monopolized: 80

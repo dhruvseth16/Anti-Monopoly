@@ -1,0 +1,25 @@
+{
+  "args": {
+    "games": 2000,
+    "players": 4,
+    "workers": 4,
+    "seed_start": 0,
+    "mode": null,
+    "max_rounds": 600,
+    "events_every": 0
+  },
+  "synthetic_placeholder_data": false,
+  "complete_data": true,
+  "config_sha256": {
+    "board.yaml": "e78c37476c2f8596",
+    "game_rules.yaml": "dbfab371fa2d52cb",
+    "agents.yaml": "dc86d4bd5204270c",
+    "competitor_cards.yaml": "e95e6de312c07faf",
+    "monopolist_cards.yaml": "2dbb140a3d5e71bd"
+  },
+  "git_commit": "6934614",
+  "python": "3.11.9",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "seconds": 155.33,
+  "pandas": "3.0.6"
+}

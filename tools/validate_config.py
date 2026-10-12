@@ -9,6 +9,7 @@ Exit code 1 on any ERROR (or on pending items with --strict).
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -18,10 +19,12 @@ from engine.cards import HANDLERS
 
 DECK_SIZE = 25
 REQUIRED_KEYS = {
-    "collect": ["amount"], "pay": ["amount"], "collect_from_each_player": ["amount"],
-    "move_to": ["tile"], "move_relative": ["steps"], "go_to_prison": [], "get_out_free": [],
+    "none": [], "collect": ["amount"], "pay": ["amount"], "collect_from_each_player": ["amount"],
+    "collect_from_each_monopolist": ["amount"], "conditional_collect": ["amount", "condition"],
+    "move_to": ["destination_index"], "move_relative": ["steps"], "go_to_prison": [], "get_out_free": [],
     "pay_per_house": ["per_house", "per_apartment"],
 }
+COLLECT_FROM = {"treasurer", "competitor", "competitors", "monopolist", "monopolists"}
 
 
 class _UniqueKeyLoader(yaml.SafeLoader):
@@ -136,7 +139,16 @@ def check_board(board: list, rules: dict, r: Report):
     if len(kinds) != 28: r.err(f"expected 28 title cards (22 streets + 4 transport + 2 utilities), found {len(kinds)}")
 
 
-def check_deck(name: str, cards, prefix: str, r: Report):
+def _dest_name_ok(board: list, idx: int, name) -> bool:
+    t = board[idx]
+    if t["type"] == "start":
+        return name == "Start"
+    if t["type"] == "corner_prison_pricewar":
+        return name in ("Prison", "Price War")
+    return name == t.get("name")
+
+
+def check_deck(name: str, cards, prefix: str, r: Report, board: list | None = None):
     cards = cards or []
     if not isinstance(cards, list): r.err(f"{name}: must be a YAML list"); return
     ids = [c.get("id") for c in cards]
@@ -144,16 +156,48 @@ def check_deck(name: str, cards, prefix: str, r: Report):
     for c in cards:
         cid = c.get("id")
         if not str(cid).startswith(prefix): r.err(f"{name}: id '{cid}' should start with '{prefix}'")
-        if not c.get("text"): r.err(f"{name} {cid}: text is empty - copy the card wording")
         eff = c.get("effect")
+        if eff is None:
+            r.err(f"{name} {cid}: effect is null - if the card has no game effect write `effect: {{type: none}}`")
+            continue
         if not isinstance(eff, dict) or "type" not in eff: r.err(f"{name} {cid}: effect.type missing"); continue
+        if not c.get("text") and eff["type"] != "move_to":          # destination-only cards have no wording
+            r.err(f"{name} {cid}: text is empty - copy the card wording")
         if eff["type"] not in HANDLERS: r.err(f"{name} {cid}: effect type '{eff['type']}' has no handler in engine/cards.py - tell me and I'll add one"); continue
         for k in REQUIRED_KEYS.get(eff["type"], []):
             if eff.get(k) is None: r.err(f"{name} {cid}: effect '{eff['type']}' needs '{k}'")
-        if eff["type"] == "move_to" and isinstance(eff.get("tile"), int) and not 0 <= eff["tile"] <= 39:
-            r.err(f"{name} {cid}: move_to tile must be an index 0-39")
+        if eff["type"] in ("collect", "conditional_collect") and eff.get("from", "treasurer") not in COLLECT_FROM:
+            r.err(f"{name} {cid}: unsupported 'from: {eff.get('from')}'")
+        if eff["type"] == "pay" and eff.get("to", "treasurer") != "treasurer":
+            r.err(f"{name} {cid}: pay 'to: {eff.get('to')}' is not supported (only treasurer)")
+        if eff["type"] == "conditional_collect" and eff.get("condition") and not re.match(r"^roll \d+ or more$", str(eff["condition"])):
+            r.err(f"{name} {cid}: condition must look like 'roll 8 or more'")
+        if eff["type"] == "move_to":
+            idx = eff.get("destination_index")
+            if not isinstance(idx, int) or not 0 <= idx <= 39:
+                r.err(f"{name} {cid}: destination_index must be a tile index 0-39")
+            elif board is not None and not _dest_name_ok(board, idx, eff.get("destination")):
+                r.err(f"{name} {cid}: destination '{eff.get('destination')}' does not match board tile {idx} ('{board[idx].get('name') or board[idx]['type']}')")
     if len(cards) < DECK_SIZE: r.todo(f"{name}: {len(cards)}/{DECK_SIZE} cards digitised")
     elif len(cards) > DECK_SIZE: r.err(f"{name}: {len(cards)} cards, the box has {DECK_SIZE}")
+
+
+def load_yaml(config_dir: str, name: str):
+    return yaml.load(Path(config_dir, name).read_text(), Loader=_UniqueKeyLoader)
+
+
+def run_checks(config_dir: str = "config") -> Report:
+    """All checks as a Report. Raises yaml.YAMLError on unreadable files (incl. duplicate keys)."""
+    r = Report()
+    rules = load_yaml(config_dir, "game_rules.yaml")
+    check_rules(rules, r)
+    if r.errors:                                   # cannot cross-check the board against broken rules
+        return r
+    check_board(load_yaml(config_dir, "board.yaml"), rules, r)
+    board = load_yaml(config_dir, "board.yaml")
+    check_deck("competitor_cards.yaml", load_yaml(config_dir, "competitor_cards.yaml"), "comp_", r, board)
+    check_deck("monopolist_cards.yaml", load_yaml(config_dir, "monopolist_cards.yaml"), "mono_", r, board)
+    return r
 
 
 def main(argv=None):
@@ -162,23 +206,11 @@ def main(argv=None):
     ap.add_argument("--strict", action="store_true")
     ap.add_argument("--list", action="store_true")
     a = ap.parse_args(argv)
-    r = Report()
-
-    def load(n):
-        try:
-            return yaml.load(Path(a.config_dir, n).read_text(), Loader=_UniqueKeyLoader)
-        except yaml.YAMLError as exc:
-            print(f"ERROR {n}: {exc}")
-            sys.exit(1)
-
-    rules = load("game_rules.yaml")
-    check_rules(rules, r)
-    if r.errors:                                   # cannot cross-check the board against broken rules
-        for m in r.errors: print(f"ERROR {m}")
+    try:
+        r = run_checks(a.config_dir)
+    except yaml.YAMLError as exc:
+        print(f"ERROR {exc}")
         sys.exit(1)
-    check_board(load("board.yaml"), rules, r)
-    check_deck("competitor_cards.yaml", load("competitor_cards.yaml"), "comp_", r)
-    check_deck("monopolist_cards.yaml", load("monopolist_cards.yaml"), "mono_", r)
     for label, items in (("ERROR", r.errors), ("WARN ", r.warnings)):
         for m in items: print(f"{label} {m}")
     if a.list:

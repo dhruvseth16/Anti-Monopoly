@@ -83,9 +83,15 @@ def validate(mutator):
     b = copy.deepcopy(BOARD); mutator(b); r = Report(); check_board(b, RULES, r); return r
 
 
-def test_shipped_board_has_no_errors():
-    r = validate(lambda b: None)
-    assert r.errors == [] and r.pending
+def test_shipped_config_is_complete_and_valid():
+    from tools.validate_config import run_checks
+    r = run_checks("config")
+    assert r.errors == [] and r.pending == [] and r.warnings == []
+
+
+def test_validator_reports_pending_when_a_field_is_nulled():
+    r = validate(lambda b: b[6]["rent"].update(competitor=None))
+    assert any("rent.competitor" in m for m in r.pending)
 
 
 def test_validator_catches_bad_rent_lists_and_group_size():

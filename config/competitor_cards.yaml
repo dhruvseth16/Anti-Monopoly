@@ -1,8 +1,3 @@
-# 25 cards total per the box contents. Only 1 digitized so far.
-# effect.type is an open vocabulary — add new types as you transcribe more cards
-# (move_to, move_relative, go_to_prison, get_out_free, pay_per_house,
-# collect_from_each_player, etc.). Don't pre-define a closed enum.
-
 - id: comp_001
   text: >
     A giant apartment house chain will let you stay in business to avoid a
@@ -12,7 +7,203 @@
     amount: 25
     from: treasurer
 
-# - id: comp_002
-#   text: null
-#   effect: null
-# ... through comp_025 — add as you digitize your physical cards
+- id: comp_002
+  text: >
+    The government has broken up a price-fixing conspiracy. Now everybody is
+    cutting prices.
+  effect:
+    type: move_to
+    destination: "Price War"
+    destination_index: 10
+
+- id: comp_003
+  text: >
+    Giant Everything, Inc. cut rents to destroy competition and then raised
+    them even higher. Monopoly profits from other products covered its
+    temporary losses. But you are stuck with your losses.
+  effect:
+    type: pay
+    amount: 50
+    to: treasurer
+
+- id: comp_004
+  text: >
+    Congress has finally given the Antitrust Division enough money to enforce
+    the Anti-Monopolist laws effectively.
+  effect:
+    type: collect_from_each_monopolist
+    amount: 25
+    from: monopolists
+
+- id: comp_005
+  text: >
+    With many big companies avoiding taxes through loopholes, the government
+    has raised your taxes to make up the difference. Feel patriotic.
+  effect:
+    type: pay
+    amount: 75
+    to: treasurer
+
+- id: comp_006
+  text: >
+    A Monopolist who injured your business has settled with the Justice
+    Department with a Consent Decree. This means that you won't be able to
+    collect damages. Congratulations on your moral victory.
+  effect:
+    type: none
+
+- id: comp_007
+  text: >
+    The Energy Monopolists have jacked up the price of heating oil.
+    Competition keeps you from passing on the whole increase to your tenants.
+  effect:
+    type: pay
+    amount: 50
+    to: treasurer
+
+- id: comp_008
+  text: null
+  effect:
+    type: move_to
+    destination: "Electric Company"
+    destination_index: 12
+
+- id: comp_009
+  text: >
+    Grant from Anti-Monopolist Foundation.
+  effect:
+    type: collect
+    amount: 25
+    from: treasurer
+
+- id: comp_010
+  text: >
+    You have won an Anti-Monopolist suit. Even after paying your lawyers,
+    you are still ahead.
+  effect:
+    type: collect
+    amount: 75
+    from: treasurer
+
+- id: comp_011
+  text: null
+  effect:
+    type: move_to
+    destination: "Washington: Pennsylvania Ave."
+    destination_index: 29
+
+- id: comp_012
+  text: >
+    The Antitrust Division has blocked a Monopolist from taking over your
+    firm. You are still in business. Play on!
+  effect:
+    type: none
+
+- id: comp_013
+  text: >
+    A government research institute has discovered a better way to make
+    houses, the supply of houses increases and your rental income falls.
+  effect:
+    type: move_to
+    destination: "Price War"
+    destination_index: 10
+
+- id: comp_014
+  text: >
+    You are starting a new business. Will it succeed? Throw the dice. If you
+    get 9 or less it fails.
+  effect:
+    type: conditional_collect
+    condition: "roll 10 or more"
+    amount: 75
+    from: treasurer
+
+- id: comp_015
+  text: >
+    You battled against putting a costly anti-pollution device on your
+    product - just like monopolists do. Fortunately for our air, you are
+    too little to get your way.
+  effect:
+    type: pay
+    amount: 25
+    to: treasurer
+
+- id: comp_016
+  text: >
+    To meet competition, you redecorated your rental units and business is up.
+  effect:
+    type: collect
+    amount: 50
+    from: treasurer
+
+- id: comp_017
+  text: null
+  effect:
+    type: move_to
+    destination: "Start"
+    destination_index: 0
+
+- id: comp_018
+  text: >
+    The Anti-Monopolist forces have broken up a giant corporation which was
+    driving you out of business by seizing your sources of supply.
+  effect:
+    type: collect
+    amount: 75
+    from: treasurer
+
+- id: comp_019
+  text: >
+    Congress granted a big corporation a big subsidy "In the public interest".
+    But your request for a little emergency aid went nowhere.
+  effect:
+    type: pay
+    amount: 75
+    to: treasurer
+
+- id: comp_020
+  text: >
+    A depression is on. Other competitors cut prices and take your business.
+  effect:
+    type: pay
+    amount: 25
+    to: treasurer
+
+- id: comp_021
+  text: null
+  effect:
+    type: move_to
+    destination: "U.S. Railroad"
+    destination_index: 5
+
+- id: comp_022
+  text: null
+  effect:
+    type: move_to
+    destination: "New Orleans: French Quarter"
+    destination_index: 3
+
+- id: comp_023
+  text: >
+    The economy is booming. All your tenants have jobs and are paying their
+    rents.
+  effect:
+    type: collect
+    amount: 50
+    from: treasurer
+
+- id: comp_024
+  text: >
+    You had many empty rooms. You cut rents, found tenants and now your
+    profits are up.
+  effect:
+    type: collect
+    amount: 50
+    from: treasurer
+
+- id: comp_025
+  text: null
+  effect:
+    type: move_to
+    destination: "Start"
+    destination_index: 0
