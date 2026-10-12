@@ -17,6 +17,7 @@ class Passive(HeuristicAgent):
     def decide_buy(self, tile, state): return False
     def decide_build(self, state): return []
     def decide_mortgage(self, state): return []
+    def decide_pay_fine(self, state): return False
 
 
 def passive(pid=0):
@@ -54,7 +55,7 @@ def test_pass_go_pays_100():
 
 def test_rent_paid_to_owner():
     b = small_board(); a = Player(0, "competitor", 1500); o = Player(1, "competitor", 1500)
-    own(o, b.tile_at(1)); e = make_engine([a, o], b); e._agent = passive(); e._last_dice = 5
+    own(o, b.tile_at(1)); e = make_engine([a, o], b); e._agent = passive()
     e.move_by(a, 1)
     assert a.cash == 1494 and o.cash == 1506
 
@@ -73,7 +74,7 @@ def test_monopolist_in_prison_collects_no_rent_but_competitor_in_pricewar_does()
 def test_short_payer_mortgages_then_goes_bankrupt():
     b = small_board(); a = Player(0, "competitor", 3); o = Player(1, "competitor", 0)
     own(o, b.tile_at(1)); t3 = b.tile_at(3); own(a, t3)
-    e = make_engine([a, o], b); e._agent = passive(); e._last_dice = 5
+    e = make_engine([a, o], b); e._agent = passive()
     b.tile_at(1).improvement_level = 5                               # rent 31
     e.move_by(a, 1)                                                  # a has 3 + mortgage 30 = 33 -> pays 31
     assert t3.mortgaged and a.cash == 2 and not a.bankrupt
@@ -91,11 +92,12 @@ def test_doubles_give_exactly_one_extra_turn():
     assert len(rolls) == 2                                           # second doubles does NOT chain
 
 
-def test_leave_jail_on_doubles_without_extra_turn():
+def test_doubles_in_jail_free_you_and_still_give_the_extra_turn():
+    # Rule 15D: doubles thrown in prison are treated exactly like any other doubles (Rule 7)
     b = small_board(); p = Player(0, "competitor", 1500, position=10, in_prison_or_pricewar=True)
-    e = make_engine([p], b); dice(e, (3, 3))
+    e = make_engine([p], b); dice(e, (3, 3), (1, 2))
     e.run_turn(p, passive())
-    assert not p.in_prison_or_pricewar and len([x for x in e.events if x["event"] == "roll"]) == 1
+    assert not p.in_prison_or_pricewar and len([x for x in e.events if x["event"] == "roll"]) == 2
 
 
 def test_forced_fine_on_third_failed_turn():
@@ -199,6 +201,7 @@ def build_game(seed):
 def test_full_game_runs_with_consistent_state(seed):
     e, agents = build_game(seed)
     e.run_game(agents, max_turns=300)
+    assert e.events[0]["event"] == "game_start" and e.events[-1]["event"] == "game_end"
     for p in e.players:
         assert p.cash >= 0
         for idx in p.holdings:
@@ -239,3 +242,62 @@ def test_rent_while_jailed_follows_config_flags():
     own(c, b.tile_at(1)); e = make_engine([a, c], b); e._agent = passive()
     e.game_rules = copy.deepcopy(RULES); e.game_rules["prison_pricewar"]["competitor_collects_rent_while_in"] = False
     e.move_by(a, 1); assert a.cash == 1500
+
+
+# ---------------- rulebook-driven additions ----------------
+class Payer(Passive):
+    def decide_pay_fine(self, state): return True
+
+
+def test_voluntary_fine_before_first_turn_then_normal_move():
+    b = small_board(); p = Player(0, "monopolist", 1500, position=10, in_prison_or_pricewar=True)
+    e = make_engine([p], b); dice(e, (1, 2))
+    e.run_turn(p, Payer(0, {"cash_floor": 0, "build_priority": "slow"}))
+    assert [x for x in e.events if x["event"] == "jail_fine"] and p.position == 13
+
+
+def test_utility_uses_a_fresh_dice_throw_not_the_movement_roll():
+    from engine.property import UtilityTile
+    b = small_board(); a = Player(0, "competitor", 1500); o = Player(1, "competitor", 1500)
+    u = UtilityTile(index=12, type="utility", name="U", price=150, dice_multiplier_competitor=[4, 4],
+                    dice_multiplier_monopolist=[4, 10]); b.tiles[12] = u; own(o, u)
+    e = make_engine([a, o], b); e._agent = passive(); dice(e, (3, 4))          # the utility throw = 7
+    e.move_by(a, 12)
+    assert a.cash == 1500 - 28 and o.cash == 1528
+
+
+def test_mortgaging_breaks_monopolisation_and_forces_house_sale():
+    from engine.property import PropertyTile
+    b = small_board(); m = Player(0, "monopolist", 1000)
+    t1, t3 = b.tile_at(1), b.tile_at(3); own(m, t1); own(m, t3)
+    t3.improvement_level = 2                                                   # 2 houses at 50 -> 50 back
+    e = make_engine([m], b); e._agent = passive()
+    e._try_mortgage_toggle(m, 1)                                               # t1 level 0 -> may mortgage
+    assert t1.mortgaged and t3.improvement_level == 0 and m.cash == 1000 + 30 + 50
+
+
+def test_mortgaged_street_does_not_count_towards_monopolisation():
+    b = small_board(); m = Player(0, "monopolist", 1000); own(m, b.tile_at(1)); own(m, b.tile_at(3))
+    b.tile_at(3).mortgaged = True
+    from engine import rules as r
+    assert not r.has_monopoly(b.tile_at(1), m, b, RULES) and r.rent_due(b.tile_at(1), m, b, RULES) == 6
+
+
+def test_game_b_ends_when_a_whole_role_is_eliminated_and_richest_survivor_wins():
+    import copy
+    b = small_board(); c1 = Player(0, "competitor", 500); c2 = Player(1, "competitor", 300)
+    m = Player(2, "monopolist", 0, bankrupt=True)
+    e = make_engine([c1, c2, m], b); e.game_rules = copy.deepcopy(RULES)
+    assert e.check_winner() is None                                            # game A: two still standing
+    e.game_rules["win_conditions"]["active_game"] = "game_b"
+    own(c2, b.tile_at(1))                                                      # +6 rent income for c2
+    assert e.check_winner() is c1                                              # 500 vs 306
+    c2.cash = 600
+    assert e.check_winner() is c2
+
+
+def test_richest_score_adds_one_landing_of_income_per_unmortgaged_holding():
+    from engine import rules as r
+    b = small_board(); c = Player(0, "competitor", 100)
+    own(c, b.tile_at(1)); own(c, b.tile_at(3)); b.tile_at(3).mortgaged = True
+    assert r.richest_score(c, b, RULES, lambda: (1, 1)) == 106

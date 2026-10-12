@@ -1,105 +1,153 @@
-# All amounts are the face values printed on cards/board (Rule 5 etc).
+# # All amounts are the face values printed on cards/board (Rule 5 etc).
+
+# starting_cash:
+#   total: 1500
+#   denominations:        # Rule 5 — exact bill breakdown dealt to each player
+#     500: 2
+#     100: 3
+#     50: 2
+#     10: 7
+#     5: 5
+#     1: 5
+
+# bank_denominations:      # box contents — Treasury's starting bills
+#   1: 50
+#   5: 40
+#   10: 50
+#   50: 50
+#   100: 50
+#   500: 20
+
+# pass_go_amount: 100       # Rule 14
+
+# income_tax:                # Rule 17 — player pays whichever is cheaper
+#   flat_amount: 200
+#   competitor:
+#     cash_percent: 0.10
+#     property_percent: 0.10      # of listed price of unmortgaged properties
+#     improvement_percent: 0.10   # of original cost of houses/apartments
+#   monopolist:
+#     cash_percent: 0.20
+#     property_percent: 0.10
+#     improvement_percent: 0.10
+
+# property_tax: 75            # Rule 18, flat, everyone
+
+# prison_pricewar:              # Rule 15
+#   fine: 50
+#   turns_before_forced_payment: 2   # must pay before 3rd turn if no doubles in first two
+#   monopolist_destination: prison
+#   competitor_destination: price_war
+#   monopolist_collects_rent_while_in: false   # Rule 15B
+#   competitor_collects_rent_while_in: true
+
+# doubles:
+#   extra_turn: true            # Rule 7
+#   extra_turn_can_chain_again: false   # the extra turn never grants a further extra turn
+
+# transport:                    # Rule 19
+#   competitor_return_percent: 0.10     # flat regardless of count owned
+#   monopolist_fare_doubles_per_company: true
+
+# utilities:                    # Rule 20
+#   dice_multiplier:
+#     competitor: 4
+#     monopolist:
+#       one_owned: 4
+#       two_owned: 10
+
+# foundation:                   # Rule 21
+#   competitor_roll:
+#     "1": 25
+#     "2": 50
+#     other: 0
+#   monopolist_payment: 160
+
+# building:                     # Rule 11
+#   competitor:
+#     max_houses_per_property: 4
+#     apartment_tier: 5            # 5th improvement tier = 1 apartment, houses returned
+#     requires_monopolization: false
+#   monopolist:
+#     max_houses_per_property: 3
+#     apartment_tier: 4
+#     requires_monopolization: true    # needs >=2 properties owned in the group first
+#     rent_doubles_once_monopolized: true   # Rule 10 — applies to the unimproved ("no houses") tier too
+
+# mortgage:                       # Rule 12
+#   value_fraction_of_price: 0.5
+#   # OBSERVED pattern from the 3 digitized cards (33≈30*1.1, 110=100*1.1, 83≈75*1.1).
+#   # NOT stated in the rulebook text itself — always prefer the literal redemption value
+#   # printed on a card over this computed fallback.
+#   redemption_interest_rate_fallback_only: 0.10
+
+# bankruptcy:                     # Rule 24
+#   houses_resold_to_treasury_at_half_price: true
+
+# role_balance:                    # Rule 4
+#   "2": {max_difference: 0}
+#   "3": {max_difference: 1}
+#   "4": {max_difference: 0}
+#   "5": {max_difference: 1}
+#   "6": {max_difference: 0}
+
+# win_conditions:                   # Rule 1
+#   game_a: last_player_standing
+#   game_b: richest_survivor_by_role
+
+# # Add to YOUR config/game_rules.yaml (nothing else in the file changes):
+
+# building:
+#   monopolist:
+#     monopolization_min_properties: 2    # add under the existing building.monopolist block
+
+# win_conditions:
+#   active_game: game_a                   # add under the existing win_conditions block (game_a | game_b)
+# '''
+
 
 starting_cash:
   total: 1500
-  denominations:        # Rule 5 — exact bill breakdown dealt to each player
-    500: 2
-    100: 3
-    50: 2
-    10: 7
-    5: 5
-    1: 5
-
-bank_denominations:      # box contents — Treasury's starting bills
-  1: 50
-  5: 40
-  10: 50
-  50: 50
-  100: 50
-  500: 20
-
-pass_go_amount: 100       # Rule 14
-
-income_tax:                # Rule 17 — player pays whichever is cheaper
+  denominations: {500: 2, 100: 3, 50: 2, 10: 7, 5: 5, 1: 5}
+bank_denominations: {1: 50, 5: 40, 10: 50, 50: 50, 100: 50, 500: 20}
+pass_go_amount: 100
+income_tax:
   flat_amount: 200
-  competitor:
-    cash_percent: 0.10
-    property_percent: 0.10      # of listed price of unmortgaged properties
-    improvement_percent: 0.10   # of original cost of houses/apartments
-  monopolist:
-    cash_percent: 0.20
-    property_percent: 0.10
-    improvement_percent: 0.10
-
-property_tax: 75            # Rule 18, flat, everyone
-
-prison_pricewar:              # Rule 15
+  competitor: {cash_percent: 0.10, property_percent: 0.10, improvement_percent: 0.10}
+  monopolist: {cash_percent: 0.20, property_percent: 0.10, improvement_percent: 0.10}
+property_tax: 75
+prison_pricewar:
   fine: 50
-  turns_before_forced_payment: 2   # must pay before 3rd turn if no doubles in first two
+  turns_before_forced_payment: 2
   monopolist_destination: prison
   competitor_destination: price_war
-  monopolist_collects_rent_while_in: false   # Rule 15B
+  monopolist_collects_rent_while_in: false
   competitor_collects_rent_while_in: true
-
 doubles:
-  extra_turn: true            # Rule 7
-  extra_turn_can_chain_again: false   # the extra turn never grants a further extra turn
-
-transport:                    # Rule 19
-  competitor_return_percent: 0.10     # flat regardless of count owned
+  extra_turn: true
+  extra_turn_can_chain_again: false
+transport:
+  competitor_return_percent: 0.10
   monopolist_fare_doubles_per_company: true
-
-utilities:                    # Rule 20
+utilities:
   dice_multiplier:
     competitor: 4
-    monopolist:
-      one_owned: 4
-      two_owned: 10
-
-foundation:                   # Rule 21
-  competitor_roll:
-    "1": 25
-    "2": 50
-    other: 0
+    monopolist: {one_owned: 4, two_owned: 10}
+foundation:
+  competitor_roll: {"1": 25, "2": 50, other: 0}
   monopolist_payment: 160
-
-building:                     # Rule 11
-  competitor:
-    max_houses_per_property: 4
-    apartment_tier: 5            # 5th improvement tier = 1 apartment, houses returned
-    requires_monopolization: false
+building:
+  competitor: {max_houses_per_property: 4, apartment_tier: 5, requires_monopolization: false}
   monopolist:
     max_houses_per_property: 3
     apartment_tier: 4
-    requires_monopolization: true    # needs >=2 properties owned in the group first
-    rent_doubles_once_monopolized: true   # Rule 10 — applies to the unimproved ("no houses") tier too
-
-mortgage:                       # Rule 12
-  value_fraction_of_price: 0.5
-  # OBSERVED pattern from the 3 digitized cards (33≈30*1.1, 110=100*1.1, 83≈75*1.1).
-  # NOT stated in the rulebook text itself — always prefer the literal redemption value
-  # printed on a card over this computed fallback.
-  redemption_interest_rate_fallback_only: 0.10
-
-bankruptcy:                     # Rule 24
-  houses_resold_to_treasury_at_half_price: true
-
-role_balance:                    # Rule 4
-  "2": {max_difference: 0}
-  "3": {max_difference: 1}
-  "4": {max_difference: 0}
-  "5": {max_difference: 1}
-  "6": {max_difference: 0}
-
-win_conditions:                   # Rule 1
+    requires_monopolization: true
+    monopolization_min_properties: 2      # ADDED
+    rent_doubles_once_monopolized: true
+mortgage: {value_fraction_of_price: 0.5, redemption_interest_rate_fallback_only: 0.10}
+bankruptcy: {houses_resold_to_treasury_at_half_price: true}
+role_balance: {"2": {max_difference: 0}, "3": {max_difference: 1}, "4": {max_difference: 0}, "5": {max_difference: 1}, "6": {max_difference: 0}}
+win_conditions:
   game_a: last_player_standing
   game_b: richest_survivor_by_role
-
-# Add to YOUR config/game_rules.yaml (nothing else in the file changes):
-
-building:
-  monopolist:
-    monopolization_min_properties: 2    # add under the existing building.monopolist block
-
-win_conditions:
-  active_game: game_a                   # add under the existing win_conditions block (game_a | game_b)
+  active_game: game_a # ADDED

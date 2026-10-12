@@ -47,7 +47,6 @@ class Engine:
         self.turn_count = 0
         self.events: list[dict] = []     # atomic event log (Hard Rule 4); stage 3 moves this to telemetry/
         self._agent = None
-        self._last_dice = 0
 
     # ------------------------------------------------------------ basics
     def log(self, event: str, player_id, **payload) -> None:
@@ -70,19 +69,16 @@ class Engine:
         self._play_roll(player, agent, allow_extra=True)
 
     def _play_roll(self, player: Player, agent, allow_extra: bool) -> None:
-        # Rule 15: card or forced fine is settled BEFORE the roll, then the turn is played normally.
+        # Rule 15: card / fine is settled BEFORE the roll, then the turn is played normally.
         if player.in_prison_or_pricewar and not self._pre_roll_jail(player):
             return                                      # went bankrupt paying the fine
         d1, d2 = self.roll_dice()
         doubles = d1 == d2
-        self._last_dice = d1 + d2
         self.log("roll", player.id, dice=[d1, d2])
 
-        freed_now = False
         if player.in_prison_or_pricewar:
             if doubles:
-                self._release(player, "doubles")
-                freed_now = True
+                self._release(player, "doubles")        # Rule 15C.1; Rule 15D: counts as ordinary doubles
             else:
                 player.turns_in_prison_or_pricewar += 1
                 self._post_move(player, agent)
@@ -93,10 +89,9 @@ class Engine:
             return
         self._post_move(player, agent)
 
-        # Rule 7: doubles -> one extra turn; chaining only if config says so. Escaping jail on doubles gives none.
+        # Rule 7: doubles -> one extra turn; chaining only if config says so.
         cfg = self.game_rules["doubles"]
-        if (doubles and allow_extra and cfg["extra_turn"] and not freed_now
-                and not player.in_prison_or_pricewar):
+        if doubles and allow_extra and cfg["extra_turn"] and not player.in_prison_or_pricewar:
             self._play_roll(player, agent, allow_extra=cfg["extra_turn_can_chain_again"])
 
     def _post_move(self, player: Player, agent) -> None:
@@ -142,7 +137,7 @@ class Engine:
         self.log("go_to_prison", player.id)
 
     def _pre_roll_jail(self, player: Player) -> bool:
-        """Use a get-out-free card, or pay the forced fine once the free-roll turns are used up.
+        """Get-out-free card; forced fine after the free-roll turns; or a voluntary fine (Rule 15C.2).
         Returns False only if the player went bankrupt."""
         cfg = self.game_rules["prison_pricewar"]
         if player.get_out_free_cards > 0:
@@ -152,6 +147,9 @@ class Engine:
             if not self.settle(player, None, cfg["fine"], "jail_fine"):
                 return False
             self._release(player, "fine")
+        elif player.cash >= cfg["fine"] and self._agent.decide_pay_fine(self._view(player)):
+            self.settle(player, None, cfg["fine"], "jail_fine")
+            self._release(player, "fine_voluntary")
         return True
 
     def _release(self, player: Player, how: str) -> None:
@@ -206,7 +204,9 @@ class Engine:
         elif isinstance(tile, TransportTile):
             amount = rules.transport_fare(tile, owner, self.board)
         else:
-            amount = rules.utility_charge(tile, owner, self.board, self._last_dice)
+            dice_total = sum(self.roll_dice())                  # Rule 20: a FRESH throw, not the movement roll
+            self.log("utility_roll", player.id, total=dice_total)
+            amount = rules.utility_charge(tile, owner, self.board, dice_total)
         self.log("rent", player.id, owner=owner.id, tile=tile.index, amount=amount)
         self.settle(player, owner, amount, "rent_payment")
 
@@ -252,6 +252,21 @@ class Engine:
             t.mortgaged = True
             player.cash += t.mortgage_value
             self.log("mortgage", player.id, tile=t.index, amount=t.mortgage_value)
+            self._demolish_if_unmonopolized(player, getattr(t, "group", None))
+
+    def _demolish_if_unmonopolized(self, player: Player, group) -> None:
+        """Rule 12: a monopolist cannot keep houses in a city once monopolisation is lost to a mortgage.
+        Houses go back to the Treasury at half price (Rule 13)."""
+        if player.role != "monopolist" or group is None:
+            return
+        mine = [t for t in self.board.properties_in_group(group) if t.owner == player.id]
+        if not mine or rules.has_monopoly(mine[0], player, self.board, self.game_rules):
+            return
+        for t in mine:
+            if t.improvement_level > 0:
+                player.cash += require(t.house_cost, f"{t.name} house_cost") * t.improvement_level // 2
+                self.log("sell_house", player.id, tile=t.index, forced=True, levels=t.improvement_level)
+                t.improvement_level = 0
 
     # ------------------------------------------------------------ agent actions
     def _try_build(self, player: Player, idx: int) -> None:
@@ -277,6 +292,7 @@ class Engine:
                 self.treasurer.pay(player, require(t.mortgage_value, f"{t.name} mortgage_value"))
                 t.mortgaged = True
                 self.log("mortgage", player.id, tile=idx, amount=t.mortgage_value)
+                self._demolish_if_unmonopolized(player, getattr(t, "group", None))
         else:
             cost = rules.redemption_cost(t, self.game_rules)
             if self.treasurer.collect(player, cost):
@@ -284,26 +300,21 @@ class Engine:
                 self.log("unmortgage", player.id, tile=idx, amount=cost)
 
     # ------------------------------------------------------------ winning
-    def check_winner(self, final: bool = False) -> Player | None:
-        """Game A: last player standing. Game B: same, plus richest survivor when the game is cut off."""
+    def check_winner(self) -> Player | None:
+        """Game A (Rule 1): last player standing.
+        Game B: ends when one whole role is eliminated; the richest survivor (Rule 25) wins."""
         alive = [p for p in self.players if not p.bankrupt]
         if len(alive) == 1:
             return alive[0]
-        if final and self.game_rules["win_conditions"]["active_game"] == "game_b":
-            return max(alive, key=lambda p: rules.net_worth(p, self.board))
+        if self.game_rules["win_conditions"]["active_game"] == "game_b" and len({p.role for p in alive}) == 1:
+            return max(alive, key=lambda p: rules.richest_score(p, self.board, self.game_rules, self.roll_dice))
         return None
 
-    def role_winners(self) -> dict:
-        """Game B reporting: richest surviving player of each role."""
-        out = {}
-        for role in ("competitor", "monopolist"):
-            alive = [p for p in self.players if p.role == role and not p.bankrupt]
-            if alive:
-                out[role] = max(alive, key=lambda p: rules.net_worth(p, self.board))
-        return out
-
     def run_game(self, agents: dict, max_turns: int = 1000) -> Player | None:
-        """agents: {player_id: agent}. One 'turn' = one full round of all players."""
+        """agents: {player_id: agent}. One 'turn' = one full round of all players.
+        Returns the winner, or None if max_turns is hit first (logged as end_reason='timeout')."""
+        self.log("game_start", None, roles={p.id: p.role for p in self.players},
+                 mode=self.game_rules["win_conditions"]["active_game"])
         for _ in range(max_turns):
             self.turn_count += 1
             for p in self.players:
@@ -312,5 +323,9 @@ class Engine:
                 self.run_turn(p, agents[p.id])
                 winner = self.check_winner()
                 if winner:
+                    alive = [q for q in self.players if not q.bankrupt]
+                    self.log("game_end", winner.id, rounds=self.turn_count,
+                             reason="last_standing" if len(alive) == 1 else "role_eliminated")
                     return winner
-        return self.check_winner(final=True)
+        self.log("game_end", None, rounds=self.turn_count, reason="timeout")
+        return None

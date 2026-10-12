@@ -28,7 +28,9 @@ def has_monopoly(tile: PropertyTile, owner: Player, board, rules_config: dict) -
     """Monopolisation = owning at least `monopolization_min_properties` of the group (capped at group size)."""
     need = rules_config["building"]["monopolist"]["monopolization_min_properties"]
     size = require(tile.group_size, f"{tile.name} group_size")
-    return board.owned_count_in_group(tile.group, owner.id) >= min(need, size)
+    # Rule 12: a mortgaged street does not count towards the two needed for monopolisation
+    owned = sum(1 for t in board.properties_in_group(tile.group) if t.owner == owner.id and not t.mortgaged)
+    return owned >= min(need, size)
 
 
 def redemption_cost(tile, rules_config: dict) -> int:
@@ -131,3 +133,21 @@ def foundation_effect(player: Player, rng, rules_config: dict) -> int:
         die = rng.randint(1, 6)
         return table.get(str(die), table["other"])
     return -cfg["monopolist_payment"]
+
+
+# ---------- Game B scoring (Rule 25) -------------------------------------
+def richest_score(player: Player, board, rules_config: dict, roll_dice) -> int:
+    """Cash + the income each unmortgaged holding would earn from one landing.
+    Utility owners throw the dice (roll_dice() -> (d1, d2)) as under Rule 20."""
+    total = player.cash
+    for idx in player.holdings:
+        t = board.tile_at(idx)
+        if t.mortgaged:
+            continue
+        if isinstance(t, PropertyTile):
+            total += rent_due(t, player, board, rules_config)
+        elif isinstance(t, TransportTile):
+            total += transport_fare(t, player, board)
+        else:
+            total += utility_charge(t, player, board, sum(roll_dice()))
+    return total

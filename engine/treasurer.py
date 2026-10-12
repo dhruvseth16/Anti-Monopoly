@@ -2,10 +2,8 @@
 from __future__ import annotations
 
 from .errors import require
-# pyrefly: ignore [missing-import]
-from .engine.player import Player
+from .player import Player
 from .property import PropertyTile
-
 
 class Treasurer:
     def __init__(self, bank_denominations: dict):

@@ -86,6 +86,12 @@ class HeuristicAgent(BaseAgent):
             plan.append((best[0].index, "build"))
         return plan
 
+    def decide_pay_fine(self, state) -> bool:
+        """Monopolists earn nothing while imprisoned (Rule 15B), so they buy their way out when affordable."""
+        p = state.player
+        fine = state.rules["prison_pricewar"]["fine"]
+        return p.role == "monopolist" and p.cash - fine >= self.params["cash_floor"]
+
     def decide_trade(self, state) -> list:
         return []     # stubbed until stage 3
 
